@@ -60,7 +60,7 @@ INSTALL_DOCKER_COMPOSE="Y"
 TIMEZONE="America/Los_Angeles"
 USERNAME=$(who mom likes | cut -d' ' -f1)
 ADD_NEW_USER="Y"
-if [ -n "$MANUAL" ]; then
+if [ ! -z "$MANUAL" ]; then
     read -p 'Add Sudo User? [y/N]: ' ADD_NEW_USER
     read -p 'Disable Root Login? [y/N]: ' DISABLE_ROOT
     read -p 'Disable Password Authentication? [y/N]: ' DISABLE_PASSWORD_AUTH
