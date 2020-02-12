@@ -76,7 +76,8 @@ if [[ "$ADD_NEW_USER" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   read < /dev/tty -rp 'Username: ' USERNAME
   echo -n 'Password: '
   read < /dev/tty -rs password
-  adduser --disabled-password --gecos "" $USERNAME --group sudo
+  adduser --disabled-password --gecos "" $USERNAME
+  usermod -aG sudo $USERNAME
   echo "$USERNAME:$password" | sudo chpasswd
 
   echo -e
