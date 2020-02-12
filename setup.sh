@@ -49,7 +49,7 @@ apt-get update -y -qq && apt-get upgrade -y -qq
 
 # Install basic packages
 echo -e
-echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 python-pip'
+echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2'
 apt-get -y -qq install sudo ufw fail2ban htop curl apache2
 
 echo -e
@@ -124,7 +124,7 @@ if [[ "$INSTALL_DOCKER" =~ ^([yY][eE][sS]|[yY])$ ]]; then
 fi
 if [[ "$INSTALL_DOCKER_COMPOSE" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   echo -e
-  if [[ -z "$(echo command -v docker-compose)" ]]; then
+  if [[ -z "$(command -v docker-compose)" ]]; then
     curl -L "https://github.com/docker/compose/releases/download/1.25.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
   fi
