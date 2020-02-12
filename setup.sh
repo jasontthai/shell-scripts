@@ -34,7 +34,7 @@ while getopts 'mh' flag; do
   esac
 done
 
-if [[ ! -z $HELP ]]; then
+if [[ -n $HELP ]]; then
   echo -e
   echo -e "Usage: ./setup.sh [-mh]"
   echo -e
@@ -60,7 +60,7 @@ INSTALL_DOCKER_COMPOSE="Y"
 TIMEZONE="America/Los_Angeles"
 USERNAME=$(who mom likes | cut -d' ' -f1)
 ADD_NEW_USER="Y"
-if [ ! -z "$MANUAL" ]; then
+if [ -n "$MANUAL" ]; then
     read -p 'Add Sudo User? [y/N]: ' ADD_NEW_USER
     read -p 'Disable Root Login? [y/N]: ' DISABLE_ROOT
     read -p 'Disable Password Authentication? [y/N]: ' DISABLE_PASSWORD_AUTH
