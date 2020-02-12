@@ -58,7 +58,7 @@ DISABLE_PASSWORD_AUTH="Y"
 INSTALL_DOCKER="Y"
 INSTALL_DOCKER_COMPOSE="Y"
 TIMEZONE="America/Los_Angeles"
-USERNAME=$(who mom likes | cut -d' ' -f1)
+USERNAME="$(echo $SUDO_USER)"
 ADD_NEW_USER="Y"
 if [ -n "$MANUAL" ]; then
     read < /dev/tty -p 'Add Sudo User? [y/N]: ' ADD_NEW_USER
