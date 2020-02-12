@@ -45,12 +45,12 @@ if [[ -n $HELP ]]; then
 fi
 
 echo -e 'Updating system...'
-apt-get update -y >/dev/null && apt-get upgrade -y >/dev/null
+apt-get update -y -qq && apt-get upgrade -y -qq
 
 # Install basic packages
 echo -e
 echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 python-pip'
-apt-get -y install sudo ufw fail2ban htop curl apache2 python-pip >/dev/null
+apt-get -y -qq install sudo ufw fail2ban htop curl apache2
 
 echo -e
 DISABLE_ROOT="Y"
@@ -89,10 +89,8 @@ if [[ "$ADD_NEW_USER" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     if [[ ! -d '/home/$USERNAME/.ssh' ]]; then
       mkdir -p /home/$USERNAME/.ssh
     fi
-    chmod 700 /home/$USERNAME/.ssh
     touch /home/$USERNAME/.ssh/authorized_keys
     echo -e "$sshKey" >>/home/$USERNAME/.ssh/authorized_keys
-    chmod 600 /home/$USERNAME/.ssh
     echo -e 'Saved SSH Key\n'
   done
 fi
@@ -119,7 +117,7 @@ fi
 if [[ "$INSTALL_DOCKER" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   echo -e
   if [[ -z "$(command -v docker)" ]]; then
-    curl -fsSL https://get.docker.com -o get-docker.sh | bash
+    curl -fsSL https://get.docker.com | bash
   fi
   usermod -aG docker $USERNAME
   echo -e "Docker Installed. Added $USERNAME to docker group"
@@ -127,7 +125,8 @@ fi
 if [[ "$INSTALL_DOCKER_COMPOSE" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   echo -e
   if [[ -z "$(echo command -v docker-compose)" ]]; then
-    pip install docker-compose
+    curl -L "https://github.com/docker/compose/releases/download/1.25.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
   fi
   echo -e "Docker Compose Installed."
 fi
@@ -135,7 +134,7 @@ fi
 if [[ -n $packages ]]; then
   echo -e
   echo -e "Installing $packages ..."
-  apt-get -y install $packages >/dev/null
+  apt-get -y -qq install $packages
 fi
 
 # reset locale settings
