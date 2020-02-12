@@ -61,28 +61,28 @@ TIMEZONE="America/Los_Angeles"
 USERNAME=$(who mom likes | cut -d' ' -f1)
 ADD_NEW_USER="Y"
 if [ -n "$MANUAL" ]; then
-    read -p 'Add Sudo User? [y/N]: ' ADD_NEW_USER
-    read -p 'Disable Root Login? [y/N]: ' DISABLE_ROOT
-    read -p 'Disable Password Authentication? [y/N]: ' DISABLE_PASSWORD_AUTH
-    read -p 'Install Docker? [y/N]: ' INSTALL_DOCKER
-    read -p 'Install Docker Compose? [y/N]: ' INSTALL_DOCKER_COMPOSE
-    read -p 'Enter your TIMEZONE [Empty to skip]: ' TIMEZONE
-    read -p 'Enter any other packages to be installed [Empty to skip]: ' packages
+    read < /dev/tty -p 'Add Sudo User? [y/N]: ' ADD_NEW_USER
+    read < /dev/tty -p 'Disable Root Login? [y/N]: ' DISABLE_ROOT
+    read < /dev/tty -p 'Disable Password Authentication? [y/N]: ' DISABLE_PASSWORD_AUTH
+    read < /dev/tty -p 'Install Docker? [y/N]: ' INSTALL_DOCKER
+    read < /dev/tty -p 'Install Docker Compose? [y/N]: ' INSTALL_DOCKER_COMPOSE
+    read < /dev/tty -p 'Enter your TIMEZONE [Empty to skip]: ' TIMEZONE
+    read < /dev/tty -p 'Enter any other packages to be installed [Empty to skip]: ' packages
 fi
 
 if [[ "$ADD_NEW_USER" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   echo -e
   echo -e 'Setting sudo user...'
-  read -rp 'Username: ' USERNAME
+  read < /dev/tty -rp 'Username: ' USERNAME
   echo -n 'Password: '
-  read -rs password
+  read < /dev/tty -rs password
   adduser --disabled-password --gecos "" $USERNAME
   echo "$USERNAME:$password" | sudo chpasswd
 
   echo -e
   echo -e 'Adding SSH Keys'
   while true; do
-    read -rp 'Enter SSH Key [Empty to skip]: ' sshKey
+    read < /dev/tty -rp 'Enter SSH Key [Empty to skip]: ' sshKey
     if [[ -z "$sshKey" ]]; then
       break
     fi
