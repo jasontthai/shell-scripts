@@ -26,9 +26,9 @@ cancel() {
 
 trap cancel SIGINT
 
-while getopts 'mh' flag; do
+while getopts 'ah' flag; do
   case "${flag}" in
-  m) MANUAL="True" ;;
+  a) AUTO="True" ;;
   h) HELP="True" ;;
   *) exit 1 ;;
   esac
@@ -37,9 +37,11 @@ done
 if [[ -n $HELP ]]; then
   echo -e
   echo -e "Usage: ./setup.sh [-mh]"
+  echo -e "       curl -sL json.id/setup.sh | sudo bash"
+  echo -e "       curl -sL json.id/setup.sh | sudo bash -s --{ah}"
   echo -e
   echo -e "Flags:"
-  echo -e "       -m : run setup script manually with prompt"
+  echo -e "       -a : run setup script automatically"
   echo -e "       -h : prints this lovely message, then exits"
   exit 0
 fi
@@ -60,7 +62,7 @@ INSTALL_DOCKER_COMPOSE="Y"
 TIMEZONE="America/Los_Angeles"
 USERNAME="$(echo $SUDO_USER)"
 ADD_NEW_USER="Y"
-if [ -n "$MANUAL" ]; then
+if [ -z "$AUTO" ]; then
     read < /dev/tty -p 'Add Sudo User? [y/N]: ' ADD_NEW_USER
     read < /dev/tty -p 'Disable Root Login? [y/N]: ' DISABLE_ROOT
     read < /dev/tty -p 'Disable Password Authentication? [y/N]: ' DISABLE_PASSWORD_AUTH
