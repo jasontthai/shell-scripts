@@ -3,6 +3,7 @@ A collection of shell scripts
 
 ## How to Run
 ```
+./setup.sh
 curl -L json.id/setup.sh | sudo bash
 ```
 
