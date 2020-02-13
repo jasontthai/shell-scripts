@@ -10,11 +10,6 @@ echo -e '# ## ## ## ## ## ## ## ## ## ## ## ## #'
 echo -e
 date
 
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root"
-  exit 1
-fi
-
 # override locale to eliminate parsing errors (i.e. using commas a delimiters rather than periods)
 export LC_ALL=C
 
@@ -46,6 +41,11 @@ if [[ -n $HELP ]]; then
   exit 0
 fi
 
+if [[ $EUID -ne 0 ]]; then
+  echo "This script must be run as root"
+  exit 1
+fi
+
 echo -e 'Updating system...'
 apt-get update -y -qq && apt-get upgrade -y -qq
 
@@ -55,8 +55,8 @@ echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 tmux'
 apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux
 
 echo -e
-DISABLE_ROOT="Y"
-DISABLE_PASSWORD_AUTH="Y"
+DISABLE_ROOT="N"
+DISABLE_PASSWORD_AUTH="N"
 INSTALL_DOCKER="Y"
 INSTALL_DOCKER_COMPOSE="Y"
 TIMEZONE="America/Los_Angeles"
