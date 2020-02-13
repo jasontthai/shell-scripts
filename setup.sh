@@ -51,8 +51,8 @@ apt-get update -y -qq && apt-get upgrade -y -qq
 
 # Install basic packages
 echo -e
-echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2'
-apt-get -y -qq install sudo ufw fail2ban htop curl apache2
+echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 tmux'
+apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux
 
 echo -e
 DISABLE_ROOT="Y"
