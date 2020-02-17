@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Debian-based VPS Setup Script by Jason Thai
+# VPS Setup Script by Jason Thai
 # Initial Feb 2020
 
 echo -e '# ## ## ## ## ## ## ## ## ## ## ## ## #'
-echo -e '#    Debian-based VPS Setup Script    #'
+echo -e '#           VPS Setup Script          #'
 echo -e '# ## ## ## ## ## ## ## ## ## ## ## ## #'
 
 echo -e
@@ -17,6 +17,25 @@ cancel() {
   echo -e
   echo -e " Aborted..."
   exit
+}
+
+init() {
+  # check release
+  if [ -f /etc/redhat-release ]; then
+      RELEASE="centos"
+  elif cat /etc/issue | grep -Eqi "debian"; then
+      RELEASE="debian"
+  elif cat /etc/issue | grep -Eqi "ubuntu"; then
+      RELEASE="ubuntu"
+  elif cat /etc/issue | grep -Eqi "centos|red hat|redhat"; then
+      RELEASE="centos"
+  elif cat /proc/version | grep -Eqi "debian"; then
+      RELEASE="debian"
+  elif cat /proc/version | grep -Eqi "ubuntu"; then
+      RELEASE="ubuntu"
+  elif cat /proc/version | grep -Eqi "centos|red hat|redhat"; then
+      RELEASE="centos"
+  fi
 }
 
 trap cancel SIGINT
@@ -46,13 +65,23 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+init
+
 echo -e 'Updating system...'
-apt-get update -y -qq && apt-get upgrade -y -qq
+if [[ "$RELEASE" == "centos" ]]; then
+  yum -y -q update
+else
+  apt-get update -y -qq && apt-get upgrade -y -qq
+fi
 
 # Install basic packages
 echo -e
 echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 tmux'
-apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux
+if [[ "$RELEASE" == "centos" ]]; then
+  yum -y -q install sudo ufw ufw fail2ban htop curl apache2 tmux
+else
+  apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux
+fi
 
 echo -e
 DISABLE_ROOT="N"
@@ -78,8 +107,13 @@ if [[ "$ADD_NEW_USER" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   read < /dev/tty -rp 'Username: ' USERNAME
   echo -n 'Password: '
   read < /dev/tty -rs password
-  adduser --disabled-password --gecos "" $USERNAME
-  usermod -aG sudo $USERNAME
+  if [[ "$RELEASE" == "centos" ]]; then
+    adduser $USERNAME
+    usermod -aG wheel $USERNAME
+  else
+    adduser --disabled-password --gecos "" $USERNAME
+    usermod -aG sudo $USERNAME
+  fi
   echo "$USERNAME:$password" | sudo chpasswd
 
   echo -e
@@ -137,7 +171,11 @@ fi
 if [[ -n $packages ]]; then
   echo -e
   echo -e "Installing $packages ..."
-  apt-get -y -qq install $packages
+  if [[ "$RELEASE" == "centos" ]]; then
+    yum -y -q install $packages
+  else
+    apt-get -y -qq install $packages
+  fi
 fi
 
 # reset locale settings
