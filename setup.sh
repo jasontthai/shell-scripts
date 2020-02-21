@@ -76,11 +76,11 @@ fi
 
 # Install basic packages
 echo -e
-echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 tmux'
+echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 tmux git'
 if [[ "$RELEASE" == "centos" ]]; then
-  yum -y -q install sudo ufw ufw fail2ban htop curl apache2 tmux
+  yum -y -q install sudo ufw fail2ban htop curl apache2 tmux git
 else
-  apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux
+  apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux git
 fi
 
 echo -e
@@ -91,10 +91,12 @@ INSTALL_DOCKER_COMPOSE="Y"
 TIMEZONE="America/Los_Angeles"
 USERNAME="$(echo $SUDO_USER)"
 ADD_NEW_USER="Y"
+INSTALL_ZSH="Y"
 if [ -z "$AUTO" ]; then
     read < /dev/tty -p 'Add Sudo User? [y/N]: ' ADD_NEW_USER
     read < /dev/tty -p 'Disable Root Login? [y/N]: ' DISABLE_ROOT
     read < /dev/tty -p 'Disable Password Authentication? [y/N]: ' DISABLE_PASSWORD_AUTH
+    read < /dev/tty -p 'Install zsh and oh-my-zsh? [y/N]" ' INSTALL_ZSH
     read < /dev/tty -p 'Install Docker? [y/N]: ' INSTALL_DOCKER
     read < /dev/tty -p 'Install Docker Compose? [y/N]: ' INSTALL_DOCKER_COMPOSE
     read < /dev/tty -p 'Enter your TIMEZONE [Empty to skip]: ' TIMEZONE
@@ -148,6 +150,19 @@ if [[ -n $TIMEZONE ]]; then
   echo -e
   echo -e 'Setting Timezone...'
   timedatectl set-timezone $TIMEZONE
+fi
+
+if [[ "$INSTALL_ZSH" =~ ^([yY][eE][sS]|[yY])$  ]]; then
+  echo -e
+  if [[ -z "$(command -v zsh)" ]]; then
+    echo -e 'Installing zsh and ohmyzsh...'
+    if [[ "$RELEASE" == "centos" ]]; then
+      yum -y -q install zsh
+    else
+      apt-get -y -qq install zsh
+    fi
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  fi
 fi
 
 # Install Docker
