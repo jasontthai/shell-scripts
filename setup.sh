@@ -96,7 +96,7 @@ if [ -z "$AUTO" ]; then
     read < /dev/tty -p 'Add Sudo User? [y/N]: ' ADD_NEW_USER
     read < /dev/tty -p 'Disable Root Login? [y/N]: ' DISABLE_ROOT
     read < /dev/tty -p 'Disable Password Authentication? [y/N]: ' DISABLE_PASSWORD_AUTH
-    read < /dev/tty -p 'Install zsh and oh-my-zsh? [y/N]" ' INSTALL_ZSH
+    read < /dev/tty -p 'Install zsh and oh-my-zsh? [y/N]: ' INSTALL_ZSH
     read < /dev/tty -p 'Install Docker? [y/N]: ' INSTALL_DOCKER
     read < /dev/tty -p 'Install Docker Compose? [y/N]: ' INSTALL_DOCKER_COMPOSE
     read < /dev/tty -p 'Enter your TIMEZONE [Empty to skip]: ' TIMEZONE
