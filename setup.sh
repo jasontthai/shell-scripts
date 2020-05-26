@@ -74,18 +74,10 @@ else
   apt-get update -y -qq && apt-get upgrade -y -qq
 fi
 
-# Install basic packages
-echo -e
-echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 tmux git certbot python-certbot-apache python3-certbot-dns-cloudflare'
-if [[ "$RELEASE" == "centos" ]]; then
-  yum -y -q install sudo ufw fail2ban htop curl apache2 tmux git certbot python-certbot-apache python3-certbot-dns-cloudflare
-else
-  apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux git certbot python-certbot-apache python3-certbot-dns-cloudflare
-fi
-
 echo -e
 DISABLE_ROOT="N"
 DISABLE_PASSWORD_AUTH="N"
+INSTALL_BASIC_PACKAGES="Y"
 INSTALL_DOCKER="Y"
 INSTALL_DOCKER_COMPOSE="Y"
 TIMEZONE="America/Los_Angeles"
@@ -93,6 +85,7 @@ USERNAME="$(echo $SUDO_USER)"
 ADD_NEW_USER="Y"
 INSTALL_ZSH="Y"
 if [ -z "$AUTO" ]; then
+    read < /dev/tty -p 'Install basic packages? [y/N]: ' INSTALL_BASIC_PACKAGES
     read < /dev/tty -p 'Add Sudo User? [y/N]: ' ADD_NEW_USER
     read < /dev/tty -p 'Disable Root Login? [y/N]: ' DISABLE_ROOT
     read < /dev/tty -p 'Disable Password Authentication? [y/N]: ' DISABLE_PASSWORD_AUTH
@@ -101,6 +94,17 @@ if [ -z "$AUTO" ]; then
     read < /dev/tty -p 'Install Docker Compose? [y/N]: ' INSTALL_DOCKER_COMPOSE
     read < /dev/tty -p 'Enter your TIMEZONE [Empty to skip]: ' TIMEZONE
     read < /dev/tty -p 'Enter any other packages to be installed [Empty to skip]: ' packages
+fi
+
+if [[ "$INSTALL_BASIC_PACKAGES" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  # Install basic packages
+  echo -e
+  echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 tmux git certbot python-certbot-apache python3-certbot-dns-cloudflare'
+  if [[ "$RELEASE" == "centos" ]]; then
+    yum -y -q install sudo ufw fail2ban htop curl apache2 tmux git certbot python-certbot-apache python3-certbot-dns-cloudflare
+  else
+    apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux git certbot python-certbot-apache python3-certbot-dns-cloudflare
+  fi
 fi
 
 if [[ "$ADD_NEW_USER" =~ ^([yY][eE][sS]|[yY])$ ]]; then
@@ -177,7 +181,7 @@ fi
 if [[ "$INSTALL_DOCKER_COMPOSE" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   echo -e
   if [[ -z "$(command -v docker-compose)" ]]; then
-    curl -L "https://github.com/docker/compose/releases/download/1.25.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
   fi
   echo -e "Docker Compose Installed."
