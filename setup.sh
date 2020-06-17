@@ -161,9 +161,9 @@ if [[ "$INSTALL_ZSH" =~ ^([yY][eE][sS]|[yY])$  ]]; then
   if [[ -z "$(command -v zsh)" ]]; then
     echo -e 'Installing zsh and ohmyzsh...'
     if [[ "$RELEASE" == "centos" ]]; then
-      yum -y -q install zsh
+      yum -y -q install zsh git
     else
-      apt-get -y -qq install zsh
+      apt-get -y -qq install zsh git
     fi
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
