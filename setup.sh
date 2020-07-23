@@ -99,11 +99,11 @@ fi
 if [[ "$INSTALL_BASIC_PACKAGES" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   # Install basic packages
   echo -e
-  echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 tmux git certbot python-certbot-apache python3-certbot-dns-cloudflare'
+  echo -e 'Installing Basic Packages: sudo ufw fail2ban htop curl apache2 tmux git certbot python3-certbot-dns-cloudflare autojump'
   if [[ "$RELEASE" == "centos" ]]; then
-    yum -y -q install sudo ufw fail2ban htop curl apache2 tmux git certbot python-certbot-apache python3-certbot-dns-cloudflare
+    yum -y -q install sudo ufw fail2ban htop curl apache2 tmux git certbot python3-certbot-dns-cloudflare autojump
   else
-    apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux git certbot python-certbot-apache python3-certbot-dns-cloudflare
+    apt-get -y -qq install sudo ufw fail2ban htop curl apache2 tmux git certbot python3-certbot-dns-cloudflare autojump
   fi
 fi
 
