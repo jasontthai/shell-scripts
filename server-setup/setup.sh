@@ -2,6 +2,7 @@
 
 # VPS Setup Script by Jason Thai
 # Initial Feb 2020
+set -e
 
 echo -e '# ## ## ## ## ## ## ## ## ## ## ## ## #'
 echo -e '#           VPS Setup Script          #'
